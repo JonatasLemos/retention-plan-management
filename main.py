@@ -1,6 +1,7 @@
 import argparse
 
 from helpers import validate_date_format, validate_plan
+from process import process_rules
 
 parser = argparse.ArgumentParser(
     prog="Retention Plan Management",
@@ -19,3 +20,7 @@ parser.add_argument(
     type=validate_date_format,
 )
 args = parser.parse_args()
+final_rule = process_rules(
+    date_arg=args.date, plan_arg=args.plan.strip().lower()
+)
+print(final_rule)
