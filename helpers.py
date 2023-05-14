@@ -37,6 +37,6 @@ def validate_plan(input_plan: str) -> str:
         str: Validated input plan
     """
     if input_plan.lower() not in map(str.lower, constants.AVAILABLE_PLANS):
-        msg = "not a valid plan"
+        msg = f"The plan: {input_plan} is not a valid plan"
         raise argparse.ArgumentTypeError(msg)
     return input_plan
