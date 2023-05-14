@@ -25,35 +25,52 @@
 
 1. Clone the project
 
-    ``git clone git@github.com:JonatasLemos/retention-plan-management.git``
+    ```
+    git clone git@github.com:JonatasLemos/retention-plan-management.git
+    ```
 
 2. Go to retention-plan-management folder
   
-    ``cd retention-plan-management``
+    ```
+    cd retention-plan-management
+    ```
 
 3. Create virtual environment
   
-    ``python3 -m venv venv``
+    ```
+    python3 -m venv venv
+    ```
 
 4. Activate virtual environment
 
-    ``source venv/bin/activate``
+    ```
+    source venv/bin/activate
+    ```
 
 5. Install the requirements
     
-    ``pip install -r requirements.txt``
+    ```
+    pip install -r requirements.txt
+    ```
 
 6. Use the command-line interface with the --help flag
 
-    ``python3 main.py --help``
+    ```
+    python3 main.py --help
+    ```
 
 7. Execute the script
 
-    ``python3 main.py --plan standard --date 2023-05-01``
+    ```
+    python3 main.py --plan standard --date 2023-05-01
+    ```
 
 ### How to run the tests 
 
 1. If all requirements are installed just execute pytest inside the activated virtual environment
 
-    ``pytest``
+    ```
+    pytest
+    ```
+
 
