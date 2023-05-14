@@ -1,0 +1,5 @@
+AVAILABLE_PLANS = ["Standard", "Gold", "Platinum"]
+DATE_FORMAT = "%Y-%m-%d"
+INITIAL_DATE = "2000-01-01"
+RETENTION_DAYS = 42
+RETENTION_YEARS = 7
