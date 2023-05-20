@@ -47,8 +47,6 @@ class Standard(DailyRule):
         """
         self._date = Date(date=input_date).date
         self._retention_days = retention_days
-        self.standard_match = False
-        self.day_rule()
 
     def day_rule(self) -> bool:
         """The plan's day rule
@@ -56,10 +54,44 @@ class Standard(DailyRule):
             bool: Wether the rule is matched
         """
         time_delta = current_date - self._date
-        self.standard_match = time_delta.days <= self._retention_days
+        return time_delta.days <= self._retention_days
 
 
-class Gold(Standard, MonthlyRule):
+# class Bronze(Standard, DailyRule, YearlyRule):
+#     def __init__(
+#         self, input_date: str, retention_days: int, retention_years: int
+#     ) -> None:
+#         """Brone Plan - contains a day rule and year rule. Derived from
+#         YearlyRule and Standard classes.
+
+#         Args:
+#             date (str): The snapshot date string
+#             retention_days (int): The number of retention days
+#         """
+#         super().__init__(input_date, retention_days)
+#         self._retention_years = retention_years
+
+#     def day_rule(self) -> bool:
+#         """The plan's day rule
+#         Returns:
+#             bool: Wether the rule is matched
+#         """
+#         return super().day_rule()
+
+#     def year_rule(self) -> bool:
+#         """The plan's year rule
+#         Returns:
+#             bool: Wether the rule is matched
+#         """
+#         if self.day_rule():
+#             return True
+#         elif self._date > current_date - relativedelta(
+#             years=self._retention_years
+#         ):
+#             return self._date.day == 1 and self._date.month == 1
+
+
+class Gold(Standard, DailyRule, MonthlyRule):
     def __init__(self, input_date: str, retention_days: int) -> None:
         """Gold Plan rules - It first applies the Standard plan day rule
         to finally apply the month rule. Derived from Standard and MonthlyRule
@@ -70,9 +102,6 @@ class Gold(Standard, MonthlyRule):
             retention_days (int): The number of retention days
         """
         super().__init__(input_date, retention_days)
-        self.gold_match = False
-        self.day_rule()
-        self.month_rule()
 
     def day_rule(self) -> bool:
         """The plan's day rule
@@ -86,16 +115,17 @@ class Gold(Standard, MonthlyRule):
         Returns:
             bool: Wether the rule is matched
         """
-        if self.standard_match:
-            self.gold_match = True
+        if self.day_rule():
+            return True
         elif self._date > current_date - relativedelta(years=1):
             month_range = calendar.monthrange(
                 self._date.year, self._date.month
             )
-            self.gold_match = self._date.day == month_range[1]
+            return self._date.day == month_range[1]
+        return False
 
 
-class Platinum(Gold, YearlyRule):
+class Platinum(Gold, DailyRule, MonthlyRule, YearlyRule):
     def __init__(
         self, input_date: str, retention_days: int, retention_years: int
     ) -> None:
@@ -109,12 +139,8 @@ class Platinum(Gold, YearlyRule):
         """
         super().__init__(input_date, retention_days)
         self._retention_years = retention_years
-        self.platinum_match = False
-        self.day_rule()
-        self.month_rule()
-        self.year_rule()
 
-    def day_rule(self):
+    def day_rule(self) -> bool:
         """The plan's day rule
         Returns:
             bool: Wether the rule is matched
@@ -133,11 +159,10 @@ class Platinum(Gold, YearlyRule):
         Returns:
             bool: Wether the rule is matched
         """
-        if self.standard_match or self.gold_match:
-            self.platinum_match = True
+        if self.day_rule() or self.month_rule():
+            return True
         elif self._date > current_date - relativedelta(
             years=self._retention_years
         ):
-            self.platinum_match = (
-                self._date.day == 31 and self._date.month == 12
-            )
+            return self._date.day == 31 and self._date.month == 12
+        return False

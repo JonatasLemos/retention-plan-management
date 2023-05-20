@@ -20,16 +20,22 @@ def process_rules(date_arg: str, plan_arg: str) -> str:
         standard = Standard(
             input_date=date_arg, retention_days=constants.RETENTION_DAYS
         )
-        return f"{initial_msg} {rules[standard.standard_match]}"
+        return f"{initial_msg} {rules[standard.day_rule()]}"
     elif plan_arg == "gold":
         gold = Gold(
             input_date=date_arg, retention_days=constants.RETENTION_DAYS
         )
-        return f"{initial_msg} {rules[gold.gold_match]}"
-    else:
-        platinum = Platinum(
-            input_date=date_arg,
-            retention_days=constants.RETENTION_DAYS,
-            retention_years=constants.RETENTION_YEARS,
-        )
-        return f"{initial_msg} {rules[platinum.platinum_match]}"
+        return f"{initial_msg} {rules[gold.month_rule()]}"
+    # elif plan_arg == "bronze":
+    #     bronze = Bronze(
+    #         input_date=date_arg,
+    #         retention_days=15,
+    #         retention_years=3,
+    #     )
+    #     return f"{initial_msg} {rules[bronze.year_rule()]}"
+    platinum = Platinum(
+        input_date=date_arg,
+        retention_days=constants.RETENTION_DAYS,
+        retention_years=constants.RETENTION_YEARS,
+    )
+    return f"{initial_msg} {rules[platinum.year_rule()]}"

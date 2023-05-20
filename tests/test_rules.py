@@ -22,9 +22,9 @@ def test_standard_match():
         retention_days=constants.RETENTION_DAYS,
         retention_years=constants.RETENTION_YEARS,
     )
-    assert std.standard_match
-    assert gold.gold_match
-    assert plat.platinum_match
+    assert std.day_rule()
+    assert gold.month_rule()
+    assert plat.year_rule()
 
 
 def test_standard_no_match():
@@ -34,7 +34,7 @@ def test_standard_no_match():
     std = Standard(
         input_date=test_date, retention_days=constants.RETENTION_DAYS
     )
-    assert not std.standard_match
+    assert not std.day_rule()
 
 
 def test_gold_match():
@@ -50,8 +50,8 @@ def test_gold_match():
         retention_days=constants.RETENTION_DAYS,
         retention_years=constants.RETENTION_YEARS,
     )
-    assert gold.gold_match
-    assert plat.platinum_match
+    assert gold.month_rule()
+    assert plat.year_rule()
 
 
 def test_gold_no_match():
@@ -62,7 +62,7 @@ def test_gold_no_match():
     test_date = datetime(test_date.year, test_date.month, month_range[0])
     test_date = test_date.strftime(constants.DATE_FORMAT)
     gold = Gold(input_date=test_date, retention_days=constants.RETENTION_DAYS)
-    assert not gold.gold_match
+    assert not gold.month_rule()
 
 
 def test_platinum_match():
@@ -78,7 +78,7 @@ def test_platinum_match():
         retention_days=constants.RETENTION_DAYS,
         retention_years=constants.RETENTION_YEARS,
     )
-    assert plat.platinum_match
+    assert plat.year_rule()
 
 
 def test_platinum_no_match():
@@ -95,4 +95,4 @@ def test_platinum_no_match():
         retention_days=constants.RETENTION_DAYS,
         retention_years=constants.RETENTION_YEARS,
     )
-    assert not plat.platinum_match
+    assert not plat.year_rule()
